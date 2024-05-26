@@ -1,0 +1,8 @@
+{
+    "first_app": "Create Your First App",
+    "components": "React Components",
+    "tailwind": "Styles w. Tailwind CSS",
+    "shadcn": "ShadCN - UI Library",
+    "landing": "Build a Landing Page",
+    "deploy": "Deploy to Vercel"
+}

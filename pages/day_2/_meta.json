@@ -1,0 +1,8 @@
+{
+    "server_client": "Client & Server",
+    "auth": "Authentication",
+    "forms": "Collecting Data w. Forms",
+    "send_data": "Sending Data",
+    "fetch_data": "Fetching Data",
+    "display_data": "Displaying Data"
+}

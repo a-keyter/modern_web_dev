@@ -2,16 +2,14 @@ import React from 'react'
 import { DocsThemeConfig } from 'nextra-theme-docs'
 
 const config: DocsThemeConfig = {
-  logo: <span>My Project</span>,
+  logo: <span>A Crash Course in Modern Web Development</span>,
   project: {
-    link: 'https://github.com/shuding/nextra-docs-template',
+    link: 'https://github.com/a-keyter/modern_web_dev',
   },
-  chat: {
-    link: 'https://discord.com',
-  },
+  
   docsRepositoryBase: 'https://github.com/shuding/nextra-docs-template',
   footer: {
-    text: 'Nextra Docs Template',
+    text: 'Alex Keyter - Generative Minds Ltd',
   },
 }
 
