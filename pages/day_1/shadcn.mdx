@@ -1,1 +1,63 @@
 # ShadCN - An Awesome UI Library
+
+Fortunately for developers who don't have the time or experience to design the components they will use in their apps, there are a number of UI libraries available.
+
+One of the most popular UI libraries for this is [shadcn](https://ui.shadcn.com/)
+
+<br/>
+
+import Image from 'next/image'
+ 
+<Image src="/shadcn.png" alt="Screenshot of the shadcn landing page" width={1000} height={1000} />
+
+Shadcn gives us a number of 'Components' that we can incorporate into our apps, ranging from inputs, buttons and forms all the way through to to tables and drop down menus.
+
+## Installing ShadCN in a NextJS App
+
+As per the documentation, we can install the library from the terminal within our project:
+
+```sh copy
+npx shadcn-ui@latest init
+```
+
+You'll then be asked a number of questions, you can acccept the default for each:
+
+```
+Which style would you like to use? › Default
+Which color would you like to use as base color? › Slate
+Do you want to use CSS variables for colors? › no / yes
+```
+
+Now, you'll be able to add UI components to your project from shadcn.
+
+```sh copy
+npx shadcn-ui@latest add button input
+```
+
+## Using ShadCN Components
+
+Now that you've installed the UI components, you can incorporate them into your page:
+
+```ts filename="page.tsx" {3} copy
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+
+export default function Home() {
+  return (
+    <main className="flex min-h-screen flex-col items-center gap-y-8 p-24 w-full">
+      <h1 className="text-6xl font-semibold">Hello World!</h1>
+      <p className="text-center text-2xl">This is our first NextJS Project</p>
+      <div className="flex w-full max-w-xl gap-x-4">
+        <Input placeholder="Enter your email address" className="w-full"></Input>
+        <Button>Sign Up!</Button>
+      </div>
+    </main>
+  );
+}
+```
+
+This gives us a page that looks like this:
+
+<br/>
+
+<Image src="/simple_land.png" alt="Screenshot of the simple landing page with UI components" width={1000} height={1000} />

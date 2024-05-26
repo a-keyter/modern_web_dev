@@ -16,8 +16,45 @@ To create our first NextJS App, we use the command:
 npx create-next-app@latest 
 ```
 
-This will give us a number of options, we can select the default for all.
+We'll call our first project: `day_1_example`
+
+We'll then have a number of options, we can select the default options for all:
+
+<br/>
 
 import Image from 'next/image'
  
 <Image src="/create_app.png" alt="Screenshot of using Create Next App" width={1000} height={1000} />
+
+
+When this is complete, we'll change into the directory we've just created:
+
+```sh filename="terminal" {3} copy
+cd day_1_example
+```
+
+Then we can open our new project in VS Code using the following command:
+
+```sh filename="terminal" {3} copy
+code .
+```
+
+Now, if you open the app folder and click page, you should see the following:
+
+<br/>
+
+<Image src="/default_app.png" alt="Screenshot of the initial Next App" width={1000} height={1000} />
+
+We can deploy our site by opening our terminal ( ctrl + shift + ' ) in vs code and running the following command:
+
+```sh filename="terminal" {3} copy
+npm run dev
+```
+
+This will initialise the development server, and your app should go live to http://localhost:3000/
+
+<br/>
+
+<Image src="/next_landing.png" alt="Screenshot of the Default Next App" width={1000} height={1000} />
+
+In the next section, we'll remove the default page elements and explore how we can create our own pages.

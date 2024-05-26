@@ -1,8 +1,9 @@
 {
     "first_app": "Create Your First App",
-    "components": "React Components",
-    "tailwind": "Styles w. Tailwind CSS",
+    "elements": "Elements & Styles",
     "shadcn": "ShadCN - UI Library",
+    "components": "React Components",
+    "project_layout": "Navigating NextJS",
     "landing": "Build a Landing Page",
     "deploy": "Deploy to Vercel"
 }
