@@ -3,7 +3,7 @@
     "elements": "Elements & Styles",
     "shadcn": "ShadCN - UI Library",
     "components": "React Components",
-    "project_layout": "Navigating NextJS",
-    "landing": "Build a Landing Page",
-    "deploy": "Deploy to Vercel"
+    "navigation": "Navigating NextJS Router",
+    "deploy": "Deploy to Vercel",
+    "landing": "Challenge 1 - Landing Page"
 }

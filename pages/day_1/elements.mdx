@@ -8,7 +8,7 @@ Now that we've got a live development server, let's learn how to put content on 
 
 We'll start by removing all of the content from the page.tsx file, leaving only the main tag and a h1 header.
 
-```ts filename="page.tsx" {3} copy
+```ts filename="page.tsx" {4} copy
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
@@ -34,9 +34,24 @@ import Image from 'next/image'
 
 If you're anything like me, you probably don't enjoy writing CSS in a separate file to the place that you declare an element.
 
-Luckily, in NextJS, we can just declare styles on the fly with Tailwind CSS. Simply add a className tag to the element you want to style.
+Luckily, in NextJS, we can just declare styles on the fly with Tailwind CSS. 
 
-```ts filename="page.tsx" {3} copy
+You can declare styles by:
+
+1. Adding a className tag to the element you want to style.
+
+2. Use the tailwind shorthand class for the properties you wish to set.
+
+Here are some of the most common tailwind classes that I use:
+
+* flex / flex-col / flex-row - Sets flex properties on the element.
+* justify-center / justify-between - Spaces elements along flex direction.
+* items-center - Aligns items at 90degrees to their flex direction.
+* text-xl / font-semibold - Set the text-size and font.
+* bg-color-purple-400 - Sets the background color of an element.
+
+
+```ts filename="page.tsx" {3, 4, 5} copy
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center gap-y-4 p-24">
@@ -53,18 +68,16 @@ If we save our file and check our development server, we should see something li
 
 <Image src="/hello_world_styled.png" alt="Screenshot of using Create Next App" width={1000} height={1000} />
 
-### Common Tailwind CSS styles
-
-The Tailwind CSS Library has lots of awesome functionality and, as with most things in software, the best way to learn about what you can do with tailwind is to [check the docs](https://v2.tailwindcss.com/docs). 
-
-Here are some of the most common tailwind classes that I use:
-
-* flex / flex-col / flex-row - Sets flex properties on the element.
-* justify-center / justify-between - Spaces elements along flex direction.
-* bg-color-purple-400 - Sets the background color of an element.
-
 ## Don't struggle on your own.
 
 Setting the styling for all of your components can take a long while, and not everyone has the time.
 
 In the next section, we'll look at a UI library which comes with pre-styled component for your application.
+
+### Bonus - Pre Made Tailwind CSS styles
+
+The Tailwind CSS Library has lots of awesome functionality and, as with most things in software, the best way to learn about what you can do with tailwind is to [check the docs](https://v2.tailwindcss.com/docs). 
+
+However, you can also learn a lot about Tailwind by just seeing other peoples components.
+
+Fortunately, the UI library we're about to see has us covered!

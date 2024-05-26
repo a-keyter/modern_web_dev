@@ -30,16 +30,19 @@ Do you want to use CSS variables for colors? › no / yes
 
 Now, you'll be able to add UI components to your project from shadcn.
 
+Run the following command in project terminal:
+
 ```sh copy
-npx shadcn-ui@latest add button input
+npx shadcn-ui@latest add button input card
 ```
 
 ## Using ShadCN Components
 
 Now that you've installed the UI components, you can incorporate them into your page:
 
-```ts filename="page.tsx" {3} copy
+```ts filename="page.tsx" {10, 11, 12, 13, 14, 15, 16} copy
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 
 export default function Home() {
@@ -47,17 +50,21 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-center gap-y-8 p-24 w-full">
       <h1 className="text-6xl font-semibold">Hello World!</h1>
       <p className="text-center text-2xl">This is our first NextJS Project</p>
+      <Card className="flex flex-col gap-y-4 p-4">
+      <h2 className="text-center">Stay in the know!</h2>
       <div className="flex w-full max-w-xl gap-x-4">
         <Input placeholder="Enter your email address" className="w-full"></Input>
         <Button>Sign Up!</Button>
       </div>
+      </Card>
     </main>
   );
 }
+
 ```
 
 This gives us a page that looks like this:
 
 <br/>
 
-<Image src="/simple_land.png" alt="Screenshot of the simple landing page with UI components" width={1000} height={1000} />
+<Image src="/simple_land.png" alt="Screenshot of the simple landing page with UI components from shadcn" width={1000} height={1000} />

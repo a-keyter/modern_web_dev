@@ -9,7 +9,7 @@ const config: DocsThemeConfig = {
   
   docsRepositoryBase: 'https://github.com/shuding/nextra-docs-template',
   footer: {
-    text: 'Alex Keyter - Generative Minds Ltd',
+    text: 'Alex Keyter - May 2024 - MIT Licence; Built with Nextra',
   },
 }
 
