@@ -1,6 +1,5 @@
 {
-    "server_client": "Client & Server",
-    "auth": "Authentication",
+    "auth": "Setting up Supabase",
     "forms": "Collecting Data w. Forms",
     "send_data": "Sending Data",
     "fetch_data": "Fetching Data",
