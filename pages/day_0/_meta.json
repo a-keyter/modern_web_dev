@@ -1,6 +1,7 @@
 {
     "vs_code": "VS Code",
     "github": "GitHub",
+    "git": "git - Version Control",
     "python": "Python",
     "vs_build": "VS Build Tools",
     "node": "Node JS"
