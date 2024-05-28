@@ -64,3 +64,70 @@ function UserNav() {
 export default UserNav
 ```
 
+## Create a User Layout
+
+Next, you'll want to create a layout for all pages in the (user) route.
+
+Click on the `(user)` folder and then add new file called  `layout.tsx`
+
+Add the following content to your layout file:
+
+```tsx filename="(user)/layout.tsx"
+import UserNav from "@/components/UserNav";
+
+export default function RootLayout({
+    children,
+  }: Readonly<{
+    children: React.ReactNode;
+  }>) {
+    return (
+        <main className="flex">
+        <UserNav/>
+        <div className="w-full max-w-6xl">
+          {children}
+        </div>
+       </main>
+    
+    );
+  }
+```
+
+Next, we'll update the content of our UserNav to display links to user pages:
+
+```tsx filename="components/UserNav.tsx" copy
+import Link from 'next/link';
+import React from 'react'
+
+function UserNav() {
+  const UserPages = [
+    {
+      title: "Dashboard",
+      href: "/dashboard"
+    },
+    {
+      title: "Create Post",
+      href: "/create"
+    }
+  ];
+
+  return (
+    <div className='w-[250px] p-4 flex flex-col gap-y-4 bg-slate-300 h-screen'>
+      <p className='font-bold'>User Navigation</p>
+      {UserPages.map((page, index) => (
+        <Link
+          key={index}
+          href={page.href}
+          className='p-2 rounded hover:bg-slate-400 transition-colors duration-300'
+        >
+          {page.title}
+        </Link>
+      ))}
+    </div>
+  )
+}
+
+export default UserNav
+
+```
+
+With this User Layout, we're now ready to create our first form.
