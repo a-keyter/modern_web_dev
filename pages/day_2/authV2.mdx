@@ -1,0 +1,127 @@
+# Authentication with Clerk
+
+Okay... No luck with Supabase Auth.
+
+Luckily, we can just use a cloud provider Clerk.
+
+Head [here](https://clerk.com/) and sign up via GitHub
+
+<br/>
+
+import Image from 'next/image'
+
+<Image src="/clerk/signup.png" alt="Screenshot of using vercel sign up page" width={1000} height={1000} />
+
+## Delete Supabase things...
+
+If you followed the original tutorial for auth with Supabase, I'm sorry.
+
+Please delete the `utils/supabase` folder, the `login` folder and `the auth/route`
+
+## Working with Clerk.
+
+Once you've deleted the Supbase rubbish, you can proceed with Clerk as per their onboarding guide:
+
+Install Clerk:
+
+```sh filename="terminal" copy
+npm install @clerk/nextjs
+```
+
+Then follow the docs to 
+
+* Set up your .env.local variables
+
+and
+
+* Set up your middleware
+
+Next, you can update you main layout.tsx file
+
+```tsx filename="layout.tsx" copy
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./globals.css";
+import NavBar from "@/components/NavBar";
+
+import {
+  ClerkProvider,
+} from '@clerk/nextjs'
+
+const inter = Inter({ subsets: ["latin"] });
+
+export const metadata: Metadata = {
+  title: "NextJS, Clerk, GenAI",
+  description: "Alex's First AI Course for LCR Developers",
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <ClerkProvider>
+    <html lang="en" className="h-screen">
+      <body className={inter.className + " h-full"}>
+        <NavBar/>
+        {children}
+        </body>
+    </html>
+    </ClerkProvider>
+
+  );
+}
+```
+
+Also update your NavBar component:
+
+```tsx filename="NavBar.tsx" copy
+import Link from "next/link";
+import React from "react";
+import { Button } from "./ui/button";
+import SignOut from "./SignOut";
+import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+
+
+export default function NavBar() {
+  const NavLinks = [
+    {
+      name: "Home",
+      href: "/",
+    },
+    {
+      name: "Contact",
+      href: "/contact",
+    },
+  ];
+
+  return (
+    <div className="w-full flex flex-1 justify-end gap-x-4 py-2 pr-4">
+      {NavLinks.map((link) => (
+        <Link
+          key={link.name}
+          href={link.href}
+          style={{ textDecoration: "none" }}
+        >
+          <Button>{link.name}</Button>
+        </Link>
+      ))}
+      <SignedOut>
+          <SignInButton mode="modal" forceRedirectUrl={"/dashboard"}/>
+        </SignedOut>
+        <SignedIn>
+          <UserButton afterSignOutUrl="/" />
+        </SignedIn>
+     </div>
+  );
+}
+```
+
+Now try it out. This was way easier. Sorry for being confusing.
+
+## Moving Forward
+
+As a programmer, it's important to accept that you're going to mess things up sometimes.
+
+That's okay - let's focus on the cool things we can build.

@@ -1,5 +1,5 @@
 {
-    "auth": "Setting up Supabase",
+    "authV2": "Auth w. Clerk",
     "dashboard": "Make a User Dashboard",
     "forms": "Collecting Data w. Forms",
     "send_data": "Sending Data",
