@@ -1,5 +1,6 @@
 {
     "auth": "Setting up Supabase",
+    "dashboard": "Make a User Dashboard",
     "forms": "Collecting Data w. Forms",
     "send_data": "Sending Data",
     "fetch_data": "Fetching Data",

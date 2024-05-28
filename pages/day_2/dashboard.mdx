@@ -1,0 +1,66 @@
+# Building a User Dashboard.
+
+Congratulations, you've implemented Authentication using Supabase.
+
+Now, we need a place for the user to go once they've successfully logged in.
+
+Typically, this will be some kind of Dashboard, where the user can see current content.
+
+Let's build the layout for this User Dashboard.
+
+## Hidden Routes - User Layout
+
+In NextJS, we can create hidden routes for users, to help us manage file structure.
+
+In your app directory, create a new folder called `(user)`
+
+Then, in the (user) directory, create a file called `dashboard/page.tsx` and a file called `create/page.tsx`
+
+In each page type rfce, and you'll generate a component.
+
+You can change the contents of the pages to something like this:
+
+```tsx filename="(user)/dashboard/page.tsx" copy
+import React from 'react'
+
+function page() {
+  return (
+    <div>Welcome to the Dashboard</div>
+  )
+}
+
+export default page
+```
+
+```tsx filename="(user)/create/page.tsx" copy
+import React from 'react'
+
+function page() {
+  return (
+    <div>Welcome to the Create Post Page</div>
+  )
+}
+
+export default page
+```
+
+## User Layout
+
+Next up, we'll want to create a UserNav that a user will use to navigate the actions they can take.
+
+Head into your Components folder and create a new file called `UserNav.tsx`
+
+Then smash your rfce to initialise the component:
+
+```tsx filename="components/UserNav.tsx" copy
+import React from 'react'
+
+function UserNav() {
+  return (
+    <div>UserNav</div>
+  )
+}
+
+export default UserNav
+```
+

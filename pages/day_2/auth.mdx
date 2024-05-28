@@ -504,3 +504,40 @@ export default async function NavBar() {
 And now, some 500 lines of code later, we have a functional login setup...
 
 NB. Note that you'll need to confirm your email on supabase signup.
+
+## Push to GitHub, Update Vercel
+
+Once you've made all the changes on your local machine, you can push your changes to GitHub.
+
+Remember that you need to write, save and close your commit message to make the push.
+
+### Update Environment Variables on Vercel
+
+You may have noticed that your `.env.local` file is slightly grayed out in the file explorer.
+
+This is because it is listed in the .gitignore file. 
+
+**YOU DO NOT WANT TO SHARE ENVIRONMENT VARIABLES PUBLICLY.**
+
+To set the .env variables on Vercel, head over to your project deployment page and click 'settings'.
+
+<Image
+  src="/vercel_env.png"
+  alt="Screenshot of vercel project management page."
+  width={1000}
+  height={1000}
+/>
+
+Then head over to Environment Variables:
+
+<Image
+  src="/vercel_env_set.png"
+  alt="Screenshot of vercel Environment Variables page."
+  width={1000}
+  height={1000}
+/>
+
+You can then copy and paste the contents of your .env.local file into vercel, and then click save.
+
+This will enable your Authentication to run on the web, and to connect to Supabase.
+

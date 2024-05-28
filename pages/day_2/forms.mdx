@@ -1,0 +1,24 @@
+# Forms with ShadCN & ZOD
+
+For this initial demo project, we're going to create a simple dashboard where users can create posts to a shared feed.
+
+We'll set three different types of post, one for Human Text, one for AI Text, and one for AI Images.
+
+We'll also set up row level security, such that the user who created a post is able to delete their own post.
+
+## Data Schema
+
+Before we get started collecting data from our user, we need to define our database Schema.
+
+In this case we'll have the following data to work with:
+
+post_type: string [human_text, genai_text, genai_image]
+title: string
+content: string
+created_by: uuid, references user.uuid
+created_at: Date
+
+**In today's session, we're only going to focus on human_text posts.**
+
+## Dashboard Page layout
+
