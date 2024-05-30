@@ -4,7 +4,34 @@ In this section, we'll learn to set up a real time listener for new posts on the
 
 ## Feed component
 
-First we create a feed component which fetches the data from all posts.
+We can create a feed component which fetches the data from all posts.
+
+We want this to automatically update whenever a new post is added.
+
+Let's start by creating a `Feed.tsx` file in our components.
+
+Use rfce to fill in the initial component outline:
+
+```tsx filename="components/Feed.tsx" copy
+import React from 'react'
+
+function Feed() {
+  return (
+    <div>Feed</div>
+  )
+}
+
+export default Feed
+```
+
+Next, we'll want to set a listener for the data. 
+
+We can use the useCollection hook from Firebase to check for posts in the Database
+
+
+
+
+
 
 Initally, we'll just display the posts from the database as JSON.
 

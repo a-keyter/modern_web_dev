@@ -7,7 +7,7 @@ const config: DocsThemeConfig = {
     link: 'https://github.com/a-keyter/modern_web_dev',
   },
   
-  docsRepositoryBase: 'https://github.com/shuding/nextra-docs-template',
+  docsRepositoryBase: 'https://github.com/a-keyter/modern_web_dev',
   footer: {
     text: 'Alex Keyter - May 2024 - MIT Licence; Built with Nextra',
   },
