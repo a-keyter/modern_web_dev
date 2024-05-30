@@ -1,7 +1,7 @@
 {
     "openai": "Working w. OpenAI",
-    "text_gen": "Generating Text",
-    "image_gen": "Generating Images",
-    "prompt_chains": "Prompt Chains",
-    "alternative_models": "Alternative Providers"
+    "text": "Generating Text",
+    "images": "Generating Images",
+    "chains": "Prompt Chains",
+    "alternatives": "Alternative Providers"
 }
