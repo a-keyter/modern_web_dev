@@ -101,6 +101,8 @@ Your database will now be provisioned, and you can head back to the main page by
 
 Next up, you'll need to register your webapp by clicking the 'web' option.
 
+<br/>
+
 <Image
   src="/firebase/setup_web.png"
   alt="Screenshot of firebase web provisioning page"
@@ -229,30 +231,65 @@ export default async function submitPost(postType: string, title: string, conten
 Now that we've set up our database and our submission action, we can redefine our onSubmit function for our form:
 
 ```tsx filename="components/HumanTextForm.tsx" copy
+"use client"
+ 
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+ 
+import { Button } from "@/components/ui/button"
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { useState } from "react"
+import { useUser } from "@clerk/nextjs"
+import submitPost from "@/lib/actions/submitPost"
+import { useRouter } from "next/navigation"
+
+const formSchema = z.object({
+  post_title: z.string().min(2).max(50),
+  post_content: z.string().min(2).max(500),
+})
+
 export default function HumanTextForm() {
   const [loading, setLoading] = useState(false);
   const { isLoaded, isSignedIn, user } = useUser();
+  const router = useRouter();
 
-  const form = useForm({
+  // Form Definition
+  const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       post_title: "",
       post_content: "",
     },
-  });
+  })
 
-  const onSubmit = async (values) => {
+  //  Submit handler.
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     if (!isSignedIn || !user) {
       console.error("User is not signed in");
+      return;
+    }
+
+    if (loading) {
       return;
     }
 
     setLoading(true);
 
     try {
-      await submitPost("postType", values.post_title, values.post_content, user.id);
+      await submitPost("human_text", values.post_title, values.post_content, user.id);
       console.log("Post submitted successfully");
       form.reset(); // Clear the form fields
+      router.push("/dashboard")
     } catch (error) {
       console.error("Error submitting post:", error);
     } finally {
@@ -260,7 +297,7 @@ export default function HumanTextForm() {
     }
   };
 
-  return(
+  return (
     // Rest of the Return Function as before
   )};
 
@@ -270,6 +307,12 @@ export default function HumanTextForm() {
 
 You can now fill in your form and see if it works.
 
+If it doesn't work, check your console to see if there are any errors.
+
+### Fill your database with dummy data.
+
+I recommend you make several posts which you will be able to fetch from the database in the next step.
+
 <br/>
 
 <Image
@@ -278,12 +321,3 @@ You can now fill in your form and see if it works.
   width={1000}
   height={1000}
 />
-
-
-If it doesn't work, check your console to see if there are any errors.
-
-
-### Fill your database with dummy data.
-
-I recommend you make several posts which you will be able to fetch from the database in the next step.
-

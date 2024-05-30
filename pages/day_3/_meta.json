@@ -1,7 +1,7 @@
 {
     "openai": "Working w. OpenAI",
-    "text": "Generating Text",
-    "images": "Generating Images",
-    "multimodal": "Using Multimodal AI",
-    "alternatives": "Alternative Providers"
+    "text_gen": "Generating Text",
+    "image_gen": "Generating Images",
+    "prompt_chains": "Prompt Chains",
+    "alternative_models": "Alternative Providers"
 }
