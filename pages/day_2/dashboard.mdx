@@ -44,9 +44,69 @@ function page() {
 export default page
 ```
 
+## Dashboard Placeholder Contents
+
+We can add some filler content to our dashboard for the time being, which gives a rough outline of what we'll be showing users.
+
+Update the `dashboard/page.tsx` file as bellow:
+
+```tsx filename="dashboard/page.tsx" copy
+import { Card } from '@/components/ui/card';
+import { auth } from '@clerk/nextjs/server';
+import React from 'react'
+
+function page() {
+  const {userId} = auth();
+  return (
+    <div className='flex flex-col gap-y-4 max-w-4xl'>
+      <h2>Welcome to the Dashboard. (User = {userId})</h2>
+      
+      {/* User Post Placeholder */}
+      <Card className='flex flex-col p-4 gap-y-1'>
+        <h3 className='font-semibold text-lg underline mb-2'>Example Post Title</h3>
+        <p>Here is some filler content for a post.</p>
+        <small className='text-right'>
+          Post by PLACEHOLDER_NAME
+        </small>
+        <small className='text-right'>
+          Posted on PLACEHOLDER_DATE
+        </small>
+      </Card>
+
+      {/* User Post Placeholder */}
+      <Card className='flex flex-col p-4 gap-y-1'>
+        <h3 className='font-semibold text-lg underline mb-2'>Example Post Title</h3>
+        <p>Here is some filler content for a post.</p>
+        <small className='text-right'>
+          Post by PLACEHOLDER_NAME
+        </small>
+        <small className='text-right'>
+          Posted on PLACEHOLDER_DATE
+        </small>
+      </Card>
+
+      {/* User Post Placeholder */}
+      <Card className='flex flex-col p-4 gap-y-1'>
+        <h3 className='font-semibold text-lg underline mb-2'>Example Post Title</h3>
+        <p>Here is some filler content for a post.</p>
+        <small className='text-right'>
+          Post by PLACEHOLDER_NAME
+        </small>
+        <small className='text-right'>
+          Posted on PLACEHOLDER_DATE
+        </small>
+      </Card>
+    </div>
+
+  )
+}
+
+export default page
+```
+
 ## User Layout
 
-Next up, we'll want to create a UserNav that a user will use to navigate the actions they can take.
+Next up, we'll want to create a UserNav that a signed in user will use to navigate the actions they can take.
 
 Head into your Components folder and create a new file called `UserNav.tsx`
 

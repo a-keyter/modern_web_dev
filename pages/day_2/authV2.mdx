@@ -1,8 +1,6 @@
 # Authentication with Clerk
 
-Okay... No luck with Supabase Auth.
-
-Luckily, we can just use a cloud provider Clerk.
+For simplicities sake, we're going to handle Authentication via Clerk.
 
 Head [here](https://clerk.com/) and sign up via GitHub
 
@@ -17,29 +15,61 @@ import Image from "next/image";
   height={1000}
 />
 
-## Delete Supabase things...
+## Create a new project
 
-If you followed the original tutorial for auth with Supabase, I'm sorry.
+If you're not automatically redirected to the 'new project' page, you can head to your dashboard and click 'add project'
 
-Please delete the `utils/supabase` folder, the `login` folder and `the auth/route`
+<br />
 
-## Working with Clerk.
+<Image
+  src="/clerk/create_app.png"
+  alt="Screenshot of the clerk dashboard page"
+  width={1000}
+  height={1000}
+/>
 
-Once you've deleted the Supbase rubbish, you can proceed with Clerk as per their onboarding guide:
+Give your application a name and click 'Create Application'
 
-Install Clerk:
+<br />
+
+<Image
+  src="/clerk/create_app2.png"
+  alt="Screenshot of using create application page in vercel"
+  width={1000}
+  height={1000}
+/>
+
+## Setting up Clerk middleware
+
+Once you've created the app, you can follow the NextJS instructions:
+
+<br />
+
+<Image
+  src="/clerk/follow_demo.png"
+  alt="Screenshot of NextJS Setup instructions for Clerk"
+  width={1000}
+  height={1000}
+/>
+
+
+This includes: 
+
+1. Install Clerk:
 
 ```sh filename="terminal" copy
 npm install @clerk/nextjs
 ```
 
-Then follow the docs to
+2. Set up your .env.local variables
 
-- Set up your .env.local variables
+Click on the package.json file and then click new file - call this file `.env.local`
 
-and
+3. Set up your middleware
 
-- Set up your middleware
+Click on the package.json file and create a new file called `middleware.ts`
+
+### Clerk Auth Wrappers
 
 Next, you can update you main layout.tsx file
 
@@ -126,10 +156,10 @@ export default function NavBar() {
 }
 ```
 
-Now try it out. This was way easier. Sorry for being confusing.
+Now try it out. Log in to you app and you should be directed to a clerk 'account management' screen.
 
-## Moving Forward
+Click on the name you gave your app at the top right and you'll be redirected back to your app.
 
-As a programmer, it's important to accept that you're going to mess things up sometimes.
+### Next up - Dashboard Contents
 
-That's okay - let's focus on the cool things we can build.
+Next, we'll set up some dashboard content and a create post form.
