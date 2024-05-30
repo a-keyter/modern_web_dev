@@ -139,10 +139,10 @@ npm install firebase
 
 Next, you'll want to create a new file at the `package.json` level called: `firebase.ts`
 
-Inside firebase.ts, you'll need to copy the contents of the firebase file:
+Inside firebase.ts, you'll need to copy the firebase settings:
 
 
-```ts filename="firebase.ts" copy
+```ts filename="firebase.ts"
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -150,12 +150,12 @@ import { initializeApp } from "firebase/app";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyD8pHDem87Iw1PPilEM4xKIVF209k2Kwr0",
-  authDomain: "nextjs-ai-course.firebaseapp.com",
-  projectId: "nextjs-ai-course",
-  storageBucket: "nextjs-ai-course.appspot.com",
-  messagingSenderId: "941404646654",
-  appId: "1:941404646654:web:c2d7c5194d3167d1f009af"
+  apiKey: "YOURAPIKEY",
+  authDomain: "YOUR AUTH DOMAIN",
+  projectId: "YOUR DETAILS HERE",
+  storageBucket: "YOUR DETAILS HERE",
+  messagingSenderId: "YOUR DETAILS HERE",
+  appId: "YOUR DETAILS HERE",
 };
 
 // Initialize Firebase
@@ -165,7 +165,7 @@ const app = initializeApp(firebaseConfig);
 Now, we're going to use a number of different firebase sdks, so you'll need to ammend your file as follows:
 
 
-```ts filename="firebase.ts" copy
+```ts filename="firebase.ts" {1,2, 3,}copy
 // Import the functions you need from the SDKs you need
 import { getApp, getApps, initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
@@ -173,12 +173,12 @@ import { getStorage } from "firebase/storage";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyD8pHDem87Iw1PPilEM4xKIVF209k2Kwr0",
-  authDomain: "nextjs-ai-course.firebaseapp.com",
-  projectId: "nextjs-ai-course",
-  storageBucket: "nextjs-ai-course.appspot.com",
-  messagingSenderId: "941404646654",
-  appId: "1:941404646654:web:c2d7c5194d3167d1f009af",
+  apiKey: "YOURAPIKEY",
+  authDomain: "YOUR AUTH DOMAIN",
+  projectId: "YOUR DETAILS HERE",
+  storageBucket: "YOUR DETAILS HERE",
+  messagingSenderId: "YOUR DETAILS HERE",
+  appId: "YOUR DETAILS HERE",
 };
 
 // Initialize Firebase
