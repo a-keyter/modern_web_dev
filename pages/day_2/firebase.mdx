@@ -1,0 +1,289 @@
+# Firebase - One of many Database Providers
+
+The time has come to submit our form to a databse. To do this, we're going to use Firebase.
+
+## Connecting to Firebase
+
+We can connect to Firebase using their SDK, we'll start by creating a firebase project.
+
+Head to the [Firebase](https://firebase.google.com/) and click 'go to console' to get started.
+
+import Image from "next/image";
+
+<br/>
+
+<Image
+  src="/firebase/firebase_land.png"
+  alt="Screenshot of using vercel sign up page"
+  width={1000}
+  height={1000}
+/>
+
+### Create Your Project
+
+Next, you'll want to click 'add project' to start creating your new firebase instance.
+
+Give your project a name e.g. `nextjs_demo`
+
+<br/>
+
+<Image
+  src="/firebase/project_name.png"
+  alt="Screenshot of using vercel sign up page"
+  width={1000}
+  height={1000}
+/>
+
+
+On the next screen, you can turn off Google Analytics (not necessary for our project.)
+
+<br/>
+
+<Image
+  src="/firebase/disable_analytics.png"
+  alt="Screenshot of using vercel sign up page"
+  width={1000}
+  height={1000}
+/>
+
+Your app will then start to provision. Continue to the next screen when it's done.
+
+### Provision a Firestore
+
+Head over to 'build' on the left hand side of your screen and click Firestore Database.
+
+<br/>
+
+<Image
+  src="/firebase/create_firestore.png"
+  alt="Screenshot of using vercel sign up page"
+  width={1000}
+  height={1000}
+/>
+
+
+Then click 'create database'.
+
+<br/>
+
+<Image
+  src="/firebase/db_init.png"
+  alt="Screenshot of the firestore database page"
+  width={1000}
+  height={1000}
+/>
+
+You can select any region for hosting the data, but it's best to choose one closest to your users.
+
+<br/>
+
+<Image
+  src="/firebase/db_name.png"
+  alt="Screenshot of the firestore database page"
+  width={1000}
+  height={1000}
+/>
+
+On the next screen, you can set the rules to 'test mode':
+
+<br/>
+
+<Image
+  src="/firebase/db_test.png"
+  alt="Screenshot of the firestore database page"
+  width={1000}
+  height={1000}
+/>
+
+Your database will now be provisioned, and you can head back to the main page by clicking 'project overview'
+
+### Register your WebApp
+
+Next up, you'll need to register your webapp by clicking the 'web' option.
+
+<Image
+  src="/firebase/setup_web.png"
+  alt="Screenshot of firebase web provisioning page"
+  width={1000}
+  height={1000}
+/>
+
+
+You can give your project a new name, and click register:
+
+<br/>
+
+<Image
+  src="/firebase/register_app.png"
+  alt="Screenshot of using vercel sign up page"
+  width={1000}
+  height={1000}
+/>
+
+Finally, you should be taken to the Firebase SDK page, which will look something like this:
+
+<br/>
+
+<Image
+  src="/firebase/fb_sdk.png"
+  alt="Screenshot of firebase SDK settings"
+  width={1000}
+  height={1000}
+/>
+
+As per the instructions on this page, you'll want to head back to your project and then run:
+
+```sh copy
+npm install firebase
+```
+
+Next, you'll want to create a new file at the `package.json` level called: `firebase.ts`
+
+Inside firebase.ts, you'll need to copy the contents of the firebase file:
+
+
+```ts filename="firebase.ts" copy
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyD8pHDem87Iw1PPilEM4xKIVF209k2Kwr0",
+  authDomain: "nextjs-ai-course.firebaseapp.com",
+  projectId: "nextjs-ai-course",
+  storageBucket: "nextjs-ai-course.appspot.com",
+  messagingSenderId: "941404646654",
+  appId: "1:941404646654:web:c2d7c5194d3167d1f009af"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+```
+
+Now, we're going to use a number of different firebase sdks, so you'll need to ammend your file as follows:
+
+
+```ts filename="firebase.ts" copy
+// Import the functions you need from the SDKs you need
+import { getApp, getApps, initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyD8pHDem87Iw1PPilEM4xKIVF209k2Kwr0",
+  authDomain: "nextjs-ai-course.firebaseapp.com",
+  projectId: "nextjs-ai-course",
+  storageBucket: "nextjs-ai-course.appspot.com",
+  messagingSenderId: "941404646654",
+  appId: "1:941404646654:web:c2d7c5194d3167d1f009af",
+};
+
+// Initialize Firebase
+const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+
+// Set Database Reference
+const db = getFirestore(app);
+
+// Set File Store Reference
+const storage = getStorage(app);
+
+// Export Database Ref and Storage Object Ref
+export { db, storage };
+```
+
+## Processing Form Data
+
+Now that we've set up our connection to firebase, we can prepare to submit our form data.
+
+In your `lib` folder, create a new folder called `actions`
+
+Inside your `actions` folder, create a file called submitPost.ts
+
+We'll define a function called submitPost here, which handles post submission:
+
+```ts filename="@/lib/actions/submitPost.ts" copy
+import { db } from "@/firebase";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+
+// Note that you have to define the types of the args we pass to the function.
+export default async function submitPost(postType: string, title: string, content: string, userId: string) {
+    try {
+        const docRef = await addDoc(collection(db, "users", userId, "posts"), {
+            postType,
+            title,
+            content,
+            timestamp: serverTimestamp(),
+        });
+        console.log("Document written with ID: ", docRef.id);
+    } catch (e) {
+        console.error("Error adding document: ", e);
+    }
+}
+```
+
+## Send Form to Firebase onSubmit
+
+Now that we've set up our database and our submission action, we can redefine our onSubmit function for our form:
+
+```tsx filename="components/HumanTextForm.tsx" copy
+export default function HumanTextForm() {
+  const [loading, setLoading] = useState(false);
+  const { isLoaded, isSignedIn, user } = useUser();
+
+  const form = useForm({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      post_title: "",
+      post_content: "",
+    },
+  });
+
+  const onSubmit = async (values) => {
+    if (!isSignedIn || !user) {
+      console.error("User is not signed in");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      await submitPost("postType", values.post_title, values.post_content, user.id);
+      console.log("Post submitted successfully");
+      form.reset(); // Clear the form fields
+    } catch (error) {
+      console.error("Error submitting post:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return(
+    // Rest of the Return Function as before
+  )};
+
+  ```
+
+## Test it out
+
+You can now fill in your form and see if it works.
+
+<br/>
+
+<Image
+  src="/firebase/first_post.png"
+  alt="Screenshot of firebase SDK settings"
+  width={1000}
+  height={1000}
+/>
+
+
+If it doesn't work, check your console to see if there are any errors.
+
+
+### Fill your database with dummy data.
+
+I recommend you make several posts which you will be able to fetch from the database in the next step.
+

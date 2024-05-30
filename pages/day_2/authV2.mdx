@@ -6,11 +6,16 @@ Luckily, we can just use a cloud provider Clerk.
 
 Head [here](https://clerk.com/) and sign up via GitHub
 
-<br/>
+<br />
 
-import Image from 'next/image'
+import Image from "next/image";
 
-<Image src="/clerk/signup.png" alt="Screenshot of using vercel sign up page" width={1000} height={1000} />
+<Image
+  src="/clerk/signup.png"
+  alt="Screenshot of using vercel sign up page"
+  width={1000}
+  height={1000}
+/>
 
 ## Delete Supabase things...
 
@@ -28,13 +33,13 @@ Install Clerk:
 npm install @clerk/nextjs
 ```
 
-Then follow the docs to 
+Then follow the docs to
 
-* Set up your .env.local variables
+- Set up your .env.local variables
 
 and
 
-* Set up your middleware
+- Set up your middleware
 
 Next, you can update you main layout.tsx file
 
@@ -44,9 +49,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import NavBar from "@/components/NavBar";
 
-import {
-  ClerkProvider,
-} from '@clerk/nextjs'
+import { ClerkProvider } from "@clerk/nextjs";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -62,14 +65,13 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-    <html lang="en" className="h-screen">
-      <body className={inter.className + " h-full"}>
-        <NavBar/>
-        {children}
+      <html lang="en" className="h-screen">
+        <body className={inter.className + " h-full"}>
+          <NavBar />
+          {children}
         </body>
-    </html>
+      </html>
     </ClerkProvider>
-
   );
 }
 ```
@@ -80,9 +82,7 @@ Also update your NavBar component:
 import Link from "next/link";
 import React from "react";
 import { Button } from "./ui/button";
-import SignOut from "./SignOut";
 import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
-
 
 export default function NavBar() {
   const NavLinks = [
@@ -108,12 +108,20 @@ export default function NavBar() {
         </Link>
       ))}
       <SignedOut>
-          <SignInButton mode="modal" forceRedirectUrl={"/dashboard"}/>
-        </SignedOut>
-        <SignedIn>
-          <UserButton afterSignOutUrl="/" />
-        </SignedIn>
-     </div>
+        <div className="bg-slate-800 text-white rounded-md items-center px-4 py-2">
+          <SignInButton mode="modal" forceRedirectUrl={"/dashboard"} />
+        </div>
+      </SignedOut>
+      <SignedIn>
+        <Link
+          href={"/dashboard"}
+          style={{ textDecoration: "none" }}
+        >
+          <Button>Dashboard</Button>
+        </Link>
+        <UserButton afterSignOutUrl="/" />
+      </SignedIn>
+    </div>
   );
 }
 ```

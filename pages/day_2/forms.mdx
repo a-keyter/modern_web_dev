@@ -4,21 +4,208 @@ For this initial demo project, we're going to create a simple dashboard where us
 
 We'll set three different types of post, one for Human Text, one for AI Text, and one for AI Images.
 
-We'll also set up row level security, such that the user who created a post is able to delete their own post.
+We'll also set our system up, such that the user who created a post is able to delete their own post.
 
-## Data Schema
+**For today, we're only going to focus on human_text posts.**
 
-Before we get started collecting data from our user, we need to define our database Schema.
+## Create Post Page layout
 
-In this case we'll have the following data to work with:
+Let's update our Create Post Page Layout, we'll start by using the `tabs` UI from ShadCN:
 
-post_type: string [human_text, genai_text, genai_image]
-title: string
-content: string
-created_by: uuid, references user.uuid
-created_at: Date
+```sh copy
+npx shadcn-ui@latest add tabs
+```
 
-**In today's session, we're only going to focus on human_text posts.**
+We can then follow the docs from shadcn and add this component to our page:
 
-## Dashboard Page layout
+```tsx filename="(user)/create/page.tsx" copy
+import React from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+function page() {
+  return (
+    <div>
+      <h1>Welcome to the Create Post page</h1>
+      <Tabs defaultValue="human_text" className="w-[600px]">
+        <TabsList>
+          <TabsTrigger value="human_text">Human Post</TabsTrigger>
+          <TabsTrigger value="ai_text">AI Text</TabsTrigger>
+          <TabsTrigger value="ai_image">AI Image</TabsTrigger>
+        </TabsList>
+        <TabsContent value="human_text">
+          <h1>This is where our human input will go.</h1>
+        </TabsContent>
+        <TabsContent value="ai_text">This is where text generation will go.</TabsContent>
+        <TabsContent value="ai_image">This is where image generation will go.</TabsContent>
+      </Tabs>
+    </div>
+  );
+}
+export default page;
+```
+
+## ShadCN Forms w. zod, react-hook-from
+
+Next up, we'll need to install our form libraries.
+
+Run the following command in your project terminal:
+
+```sh copy
+npx shadcn-ui@latest add form
+```
+
+We'll also need to install the node libraries for our project:
+
+```sh copy
+npm install zod react-hook-form @hookform/resolvers
+```
+
+Next, we can create a HumanTextForm.tsx component
+
+```tsx filename="components/HumanTextForm.tsx" copy
+import React from 'react'
+
+function HumanTextForm() {
+  return (
+    <div>HumanTextForm</div>
+  )
+}
+
+export default HumanTextForm
+```
+
+Now, the first thing we have to do is create a schema for our form.
+
+For this, we'll use zod, a library made for form creation and validation.
+
+```tsx filename="components/HumanTextForm.tsx" copy
+"use client"
+
+import { z } from "zod"
+
+const formSchema = z.object({
+  post_title: z.string().min(2).max(50),
+  post_content: z.string().min(2).max(500),
+})
+```
+
+
+Next up, we need to define our form object:
+
+```tsx filename="components/HumanTextForm.tsx" copy
+"use client"
+
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+
+const formSchema = z.object({
+  post_title: z.string().min(2).max(50),
+  post_content: z.string().min(2).max(500),
+})
+
+export function HumanTextForm() {
+  // 1. Define your form.
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      post_title: "",
+      post_content: "",
+    },
+  })
+ 
+  // 2. Define a submit handler.
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    // Do something with the form values.
+    // ✅ This will be type-safe and validated.
+    console.log(values)
+  }
+}
+```
+
+Lastly, we need to build out our form:
+
+
+```tsx filename="components/HumanTextForm.tsx" copy
+"use client"
+ 
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+ 
+import { Button } from "@/components/ui/button"
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+
+const formSchema = z.object({
+  post_title: z.string().min(2).max(50),
+  post_content: z.string().min(2).max(500),
+})
+
+export default function HumanTextForm() {
+  // Form Definition
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      post_title: "",
+      post_content: "",
+    },
+  })
+ 
+  //  Submit handler.
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    // Do something with the form values.
+    // ✅ This will be type-safe and validated.
+    console.log(values)
+  }
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <FormField
+          control={form.control}
+          name="post_title"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Post Title</FormLabel>
+              <FormControl>
+                <Input placeholder="e.g. Project Ideas" {...field} />
+              </FormControl>
+              <FormDescription>
+                This is the title of your post.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="post_content"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Post Content</FormLabel>
+              <FormControl>
+                <Input placeholder="e.g. This is a short introduction to some of my ideas..." {...field} />
+              </FormControl>
+              <FormDescription>
+                This is the content of your post.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit">Submit</Button>
+      </form>
+    </Form>
+  )
+}
+```
 

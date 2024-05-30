@@ -2,6 +2,6 @@
     "openai": "Working w. OpenAI",
     "text": "Generating Text",
     "images": "Generating Images",
-    "multimodal": "Multimodal AI",
+    "multimodal": "Using Multimodal AI",
     "alternatives": "Alternative Providers"
 }

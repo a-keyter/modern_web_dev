@@ -10,7 +10,7 @@ Let's build the layout for this User Dashboard.
 
 ## Hidden Routes - User Layout
 
-In NextJS, we can create hidden routes for users, to help us manage file structure.
+In NextJS, we can create hidden routes, to help us manage file structure.
 
 In your app directory, create a new folder called `(user)`
 
@@ -130,53 +130,21 @@ export default UserNav
 
 ```
 
-## What can we put on our Dashboard page?
+## Access the User Object from Dashboard
 
-To see where we're going with the Dashboard, it can be helpful to load some dummy data, which will simulate the data we expect to receive from.
+We can now access the current User from clerk:
 
-Let's do this, by creating a file called dummy_posts.ts in our dashboard folder
+```tsx filename="(user)/dashboard/page.tsx" {2, 8} copy
+import React from 'react'
+import { auth } from '@clerk/nextjs/server';
 
-```ts filename="app/dashboard/dummy_posts.ts" copy
-// Set the necessary types
-type UUID = string;
 
-// Set a type definition for posts,
-interface Post {
-  post_type: 'human_text' | 'genai_text' | 'genai_image';
-  title: string;
-  content: string;
-  created_by: UUID;
-  created_at: Date;
+function page() {
+  const {userId} = auth();
+  return (
+    <div>Welcome to the Dashboard. (User = {userId})</div>
+  )
 }
 
-// Create dummy data
-const posts: Post[] = [
-  {
-    post_type: 'human_text',
-    title: 'Human Generated Text Post',
-    content: 'This is a human-generated text content.',
-    created_by: '123e4567-e89b-12d3-a456-426614174000',
-    created_at: new Date('2023-01-01T10:00:00Z')
-  },
-  {
-    post_type: 'genai_text',
-    title: 'AI Generated Text Post',
-    content: 'This is an AI-generated text content.',
-    created_by: '123e4567-e89b-12d3-a456-426614174001',
-    created_at: new Date('2023-02-01T10:00:00Z')
-  },
-  {
-    post_type: 'genai_image',
-    title: 'AI Generated Image Post',
-    content: 'This is an AI-generated image content.',
-    created_by: '123e4567-e89b-12d3-a456-426614174002',
-    created_at: new Date('2023-03-01T10:00:00Z')
-  }
-];
-
-// Exporting posts for use in other modules
-export default posts;
+export default page
 ```
-
-
-

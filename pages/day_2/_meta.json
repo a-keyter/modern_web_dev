@@ -1,8 +1,7 @@
 {
     "authV2": "Auth w. Clerk",
     "dashboard": "Make a User Dashboard",
-    "forms": "Collecting Data w. Forms",
-    "send_data": "Sending Data",
-    "fetch_data": "Fetching Data",
+    "forms": "Setting up a ShadCN Form",
+    "firebase": "Connecting to Firebase",
     "display_data": "Displaying Data"
 }
