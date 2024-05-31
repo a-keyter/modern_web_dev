@@ -1,8 +1,8 @@
 # Building with Components
 
-In the last section, we added some UI elements from the ShadCN library to make a newsletter signup form.
+In the last section, we added some UI elements from the ShadCN library to make a placeholder for posts.
 
-But what if we want to use this signup form elsewhere in our app?
+But what if we want to use this placeholder multiple times on our app? Do we have to rewrite that code every time?
 
 This is where React comes in, with an idea called Components.
 
@@ -21,70 +21,94 @@ For example:
 
 ## Let's make our first component together.
 
-We'll start by creating a new file `Email_Signup.tsx` in our 'components' folder.
+We'll start by creating a new file `ExamplePost.tsx` in our 'components' folder.
 
 Then we can use the `rfce` code snippet to create a react component.
 
 NB. COMPONENTS MUST ALWAYS START WITH A CAPITAL LETTER.
 
-```ts filename="/app/components/Email_Signup.tsx"
+```ts filename="app/components/ExamplePost.tsx"
 rfce
 ```
 
 Which will give us:
 
-```ts filename="/app/components/Email_Signup.tsx"
+```ts filename="app/components/ExamplePost.tsx"
 import React from 'react'
 
-function Email_Signup() {
+function ExamplePost.tsx() {
   return (
-    <div>Email</div>
+    <div>ExamplePost</div>
   )
 }
 
-export default Email_Signup
+export default ExamplePost
 ```
 
 We can now go back to our main page.tsx file and copy the content from our component:
 
 
-```tsx filename="/app/components/Email_Signup.tsx" copy
+```tsx filename="/app/components/ExamplePost.tsx" copy
 import React from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-function Email_Signup() {
+function ExamplePost() {
   return (
-    <Card className="flex flex-col gap-y-4 p-4">
-      <h2 className="text-center">Stay in the know!</h2>
-      <div className="flex w-full max-w-xl gap-x-4">
-        <Input placeholder="Enter your email address" className="w-full" />
-        <Button>Sign Up!</Button>
-      </div>
-    </Card>
+    <Card className="p-4 w-full max-w-2xl flex flex-col justify-center gap-y-6">
+        <div className="flex items-center gap-x-4">
+          <Avatar>
+            <AvatarImage src="https://github.com/shadcn.png" />
+            <AvatarFallback>CN</AvatarFallback>
+          </Avatar>
+          <div className="flex flex-col">
+            <h2>Placeholder Name</h2>
+            <small>Placeholder Date</small>
+          </div>
+        </div>
+        <div className="flex flex-col gap-y-2 w-full">
+          <h2>Post Title</h2>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+            aliquip ex ea commodo consequat.
+          </p>
+        </div>
+
+        <hr />
+        <div className="flex w-full justify-center items-center gap-x-8">
+          <Input className="w-full max-w-xl" placeholder="Leave a comment..." />
+          <Button>Comment</Button>
+        </div>
+      </Card>
   );
 }
 
-export default Email_Signup;
+export default ExamplePost;
 
 ```
 
 Finally, we can import the component into our main page:
 
-```tsx filename="@/page.tsx" {1, 8} copy
-import Email_Signup from "@/components/Email_Signup";
+```tsx filename="@/page.tsx" {1, 8, 9, 10} copy
+import ExamplePost from "@/components/ExamplePost";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center gap-y-8 p-24 w-full">
+    <main className="flex min-h-screen flex-col items-center gap-y-4 p-12 w-full">
       <h1 className="text-6xl font-semibold">Hello World!</h1>
       <p className="text-center text-2xl">This is our first NextJS Project</p>
-      <Email_Signup />
+      <ExamplePost />
+      <ExamplePost />
+      <ExamplePost />
     </main>
   );
 }
+
 ```
 
 And there you have it, you've made your first React Component.

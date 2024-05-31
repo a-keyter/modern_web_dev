@@ -9,12 +9,12 @@ As of NextJS 13, we were introduced to the App Router. This enables us to define
 Go inside your 'app' directory and add a new file called
 
 ```sh copy
-contact/page.tsx
+create/page.tsx
 ```
 
 Inside the page.tsx file, type rfce and push enter, you should see the following:
 
-```tsx filename="/app/contact/page.tsx"
+```tsx filename="@/create/page.tsx"
 import React from 'react'
 
 function page() {
@@ -26,43 +26,32 @@ function page() {
 export default page
 ```
 
-Save the file, and navigate to http://localhost:3000/contact
+Save the file, and navigate to http://localhost:3000/create
 
 This will give you an empty page that reads 'page'.
 
-Now, you can add some styling and content to the contact page:
+Now, you can add some styling and content to the create page:
 
 
-```tsx filename="/app/contact/page.tsx"
-import React from 'react'
-
-function page() {
-  return (
-    <div className='w-full flex flex-col items-center gap-y-4'>
-        <h1 className='text-6xl font-semibold'>This is my contact page</h1>
-    </div>
-  )
-}
-
-export default page
-```
-And Finally you can import the Email_Signup component we defined in the last section.
-
-```tsx filename="/app/contact/page.tsx"
-import Email_Signup from '@/components/Email_Signup'
-import React from 'react'
+```tsx filename="@/create/page.tsx"
+import React from "react";
 
 function page() {
   return (
-    <div className='flex flex-col items-center gap-y-4'>
-        <h1 className='text-6xl font-semibold'>This is my contact page</h1>
-        <Email_Signup />
-    </div>
-  )
+    <main className="flex flex-col items-center gap-y-4 py-12 w-full">
+      <div className="w-full max-w-2xl p-4">
+        <h2 className="text-2xl">Create a new post:</h2>
+      </div>
+    </main>
+  );
 }
 
-export default page
+export default page;
+
 ```
+
+```sh copy
+npx
 
 ## Creating a NavBar component
 
@@ -88,6 +77,34 @@ function NavBar() {
 export default NavBar
 ```
 
+### Shaping our component
+
+Now that we've created the component, we can update the html elements we are using and add some styling. We'll also use the Button component from ShadCN that we imported earlier, as well as the Link component from NextJS.
+
+```ts filename="/app/components/NavBar.tsx"
+import React from "react";
+import Link from "next/link";
+import { Button } from "./ui/button";
+
+function NavBar() {
+  return (
+    <nav className="flex justify-between items-center px-4 py-4 border-b-black border-b-2 sticky top-0 z-50 bg-white">
+      <h1>NextJS Feed Demo</h1>
+      <div className="flex gap-x-4 pr-4">
+        <Link href="#">
+          <Button>Example</Button>
+        </Link>
+      </div>
+    </nav>
+  );
+}
+
+export default NavBar;
+
+```
+
+### Defining our Page Links
+
 We'll then use the the magic of Javascript to define an array of our pages links:
 
 ```ts filename="/app/components/NavBar.tsx"
@@ -107,48 +124,61 @@ function NavBar() {
     ]
 
   return (
-    <div>NavBar</div>
-  )
+    <nav className="flex justify-between items-center px-4 py-4 border-b-black border-b-2 sticky top-0 z-50 bg-white">
+      <h1>NextJS Feed Demo</h1>
+      <div className="flex gap-x-4 pr-4">
+        <Link href="#">
+          <Button>Example</Button>
+        </Link>
+      </div>
+    </nav>
+  );
 }
 
 export default NavBar
 ```
 
+### Mapping over our links.
+
 Now we can map over our NavLinks array to give us multiple links:
 
 
 ```ts filename="/app/components/NavBar.tsx" copy
-import Link from 'next/link';
-import React from 'react'
-import { Button } from './ui/button';
+import Link from "next/link";
+import React from "react";
+import { Button } from "./ui/button";
 
 function NavBar() {
-    const NavLinks = [
-      {
-        name: "Home",
-        href: "/" 
-      },
-      {
-        name: "Contact",
-        href: "/contact" 
-      }
-    ];
-  
-    return (
-      <div className='w-full flex justify-end gap-x-4 py-2'>
+  const NavLinks = [
+    {
+      name: "Home",
+      href: "/",
+    },
+    {
+      name: "Create",
+      href: "/create",
+    },
+  ];
+
+  return (
+    <nav className="flex justify-between items-center px-4 py-4 border-b-black border-b-2 sticky top-0 z-50 bg-white">
+      <h1>NextJS Feed Demo</h1>
+      <div className="flex gap-x-4 pr-4">
         {NavLinks.map((link) => (
-          <Link key={link.name} href={link.href} style={{ textDecoration: 'none' }}>
-            <Button>
-              {link.name}
-            </Button>
+          <Link
+            key={link.name}
+            href={link.href}
+          >
+            <Button>{link.name}</Button>
           </Link>
         ))}
       </div>
-    );
-  }
-  
-  export default NavBar;
-  ```
+    </nav>
+  );
+}
+
+export default NavBar;
+```
 
 Then we can navigate to our layout.tsx file, and import our NavBar.
 
