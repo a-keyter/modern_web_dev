@@ -63,11 +63,48 @@ npm install @clerk/nextjs
 
 2. Set up your .env.local variables
 
-Click on the package.json file and then click new file - call this file `.env.local`
+Click on the package.json file and then click new file and call this file `.env.local`
+
+Copy the environment variables from the Clerk setup process.
 
 3. Set up your middleware
 
-Click on the package.json file and create a new file called `middleware.ts`
+Click on the package.json file again and create a new file called `middleware.ts`
+
+Then copy the code provided by Clerk.
+
+```ts filename="middleware.ts" copy
+import { clerkMiddleware } from "@clerk/nextjs/server";
+
+export default clerkMiddleware();
+
+export const config = {
+  matcher: ['/((?!.*\\..*|_next).*)', '/', '/(api|trpc)(.*)'],
+};
+```
+
+4. Set protected routes
+
+Next, we can update our middleware to protect any page routes. In this case, we'll protect the Create page.
+
+```ts filename="middleware.ts" copy
+import {
+  clerkMiddleware,
+  createRouteMatcher
+} from '@clerk/nextjs/server';
+
+const isProtectedRoute = createRouteMatcher([
+  '/create(.*)',
+]);
+
+export default clerkMiddleware((auth, req) => {
+  if (isProtectedRoute(req)) auth().protect();
+});
+
+export const config = {
+  matcher: ['/((?!.*\\..*|_next).*)', '/', '/(api|trpc)(.*)'],
+};
+```
 
 ### Clerk Auth Wrappers
 
@@ -109,57 +146,53 @@ export default function RootLayout({
 Also update your NavBar component:
 
 ```tsx filename="NavBar.tsx" copy
-import Link from "next/link";
 import React from "react";
+import Link from "next/link";
 import { Button } from "./ui/button";
 import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
-export default function NavBar() {
+function NavBar() {
   const NavLinks = [
     {
       name: "Home",
       href: "/",
     },
     {
-      name: "Contact",
-      href: "/contact",
+      name: "Create",
+      href: "/create",
     },
   ];
 
   return (
-    <div className="w-full flex flex-1 justify-end gap-x-4 py-2 pr-4">
-      {NavLinks.map((link) => (
-        <Link
-          key={link.name}
-          href={link.href}
-          style={{ textDecoration: "none" }}
-        >
-          <Button>{link.name}</Button>
-        </Link>
-      ))}
-      <SignedOut>
-        <div className="bg-slate-800 text-white rounded-md items-center px-4 py-2">
-          <SignInButton mode="modal" forceRedirectUrl={"/dashboard"} />
-        </div>
-      </SignedOut>
-      <SignedIn>
-        <Link
-          href={"/dashboard"}
-          style={{ textDecoration: "none" }}
-        >
-          <Button>Dashboard</Button>
-        </Link>
-        <UserButton afterSignOutUrl="/" />
-      </SignedIn>
-    </div>
+    <nav className="flex justify-between items-center px-4 py-4 border-b-black border-b-2 sticky top-0 z-50 bg-white">
+      <h1>NextJS Feed Demo</h1>
+      <div className="flex gap-x-4">
+        {NavLinks.map((link) => (
+          <Link key={link.name} href={link.href}>
+            <Button>{link.name}</Button>
+          </Link>
+        ))}
+        <SignedOut>
+          <div className="bg-slate-800 text-white rounded-md items-center px-4 py-2">
+            <SignInButton mode="modal" forceRedirectUrl={"/dashboard"} />
+          </div>
+        </SignedOut>
+        <SignedIn>
+          <UserButton afterSignOutUrl="/" />
+        </SignedIn>
+      </div>
+    </nav>
   );
 }
+
+export default NavBar;
+
 ```
 
 Now try it out. Log in to you app and you should be directed to a clerk 'account management' screen.
 
-Click on the name you gave your app at the top right and you'll be redirected back to your app.
+Click on the name you gave your app at the top left and you'll be redirected back to your app.
 
 ### Next up - Dashboard Contents
 
-Next, we'll set up some dashboard content and a create post form.
+Next, we'll set up some a create post form.

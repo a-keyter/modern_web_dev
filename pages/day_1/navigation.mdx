@@ -53,7 +53,9 @@ export default page;
 
 We're going to work on 4 different types of post option for this course.
 
-Let's create a tab layout for the different options:
+Let's create a tab layout for the different options.
+
+We can do this by using the Tabs component from shadcn - https://ui.shadcn.com/docs/components/tabs
 
 ```sh copy
 npx shadcn-ui@latest add tabs
@@ -168,8 +170,8 @@ function NavBar() {
             href: "/" 
         },
         {
-            name: "Contact",
-            href: "/contact" 
+            name: "Create",
+            href: "/create" 
         }
     ]
 
@@ -298,4 +300,10 @@ If you've followed up to this point, you should now have a page like this:
 
 import Image from 'next/image'
  
-<Image src="/end_day_1.png" alt="Screenshot of application at the end of day 1" width={1000} height={1000} />
+<Image src="/day1/end_day_1.png" alt="Screenshot of application at the end of day 1" width={1000} height={1000} />
+
+and a create page like this:
+
+<br/>
+
+<Image src="/day1/end_day_1_c.png" alt="Screenshot of application at the end of day 1" width={1000} height={1000} />

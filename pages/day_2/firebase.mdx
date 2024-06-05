@@ -167,8 +167,7 @@ const app = initializeApp(firebaseConfig);
 Now, we're going to use a number of different firebase sdks, so you'll need to ammend your file as follows:
 
 
-```ts filename="firebase.ts" {1,2, 3,}copy
-// Import the functions you need from the SDKs you need
+```ts filename="firebase.ts" {1, 2, 3,} copy
 import { getApp, getApps, initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
@@ -202,16 +201,16 @@ Now that we've set up our connection to firebase, we can prepare to submit our f
 
 In your `lib` folder, create a new folder called `actions`
 
-Inside your `actions` folder, create a file called submitPost.ts
+Inside your `actions` folder, create a file called submitTextPost.ts
 
-We'll define a function called submitPost here, which handles post submission:
+We'll define a function called submitTextPost here, which handles post submission:
 
-```ts filename="@/lib/actions/submitPost.ts" copy
+```ts filename="@/lib/actions/submitTextPost.ts" copy
 import { db } from "@/firebase";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 
 // Note that you have to define the types of the args we pass to the function.
-export default async function submitPost(postType: string, title: string, content: string, userId: string) {
+export default async function submitTextPost(postType: string, title: string, content: string, userId: string) {
     try {
         const docRef = await addDoc(collection(db, "users", userId, "posts"), {
             postType,
@@ -230,49 +229,31 @@ export default async function submitPost(postType: string, title: string, conten
 
 Now that we've set up our database and our submission action, we can redefine our onSubmit function for our form:
 
-```tsx filename="components/HumanTextForm.tsx" copy
-"use client"
- 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
- 
-import { Button } from "@/components/ui/button"
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { useState } from "react"
-import { useUser } from "@clerk/nextjs"
-import submitPost from "@/lib/actions/submitPost"
-import { useRouter } from "next/navigation"
+We'll start by importing necessary dependencies:
 
-const formSchema = z.object({
-  post_title: z.string().min(2).max(50),
-  post_content: z.string().min(2).max(500),
-})
+```tsx filename="components/forms/HumanTextForm.tsx" copy
+import { useState } from "react";
+import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
+import submitTextPost from "@/lib/actions/submitTextPost";
+```
+
+Next we can add a loading state and a User state object using the useState and useUser hooks:
+
+```tsx filename="components/forms/HumanTextForm.tsx" copy
 export default function HumanTextForm() {
   const [loading, setLoading] = useState(false);
   const { isLoaded, isSignedIn, user } = useUser();
   const router = useRouter();
 
-  // Form Definition
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      post_title: "",
-      post_content: "",
-    },
-  })
+  // Rest of the code bellow.
+```
 
-  //  Submit handler.
+Then we have to redefine our onSubmit function
+
+```tsx filename="components/forms/HumanTextForm.tsx" copy
+//  Submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
     if (!isSignedIn || !user) {
       console.error("User is not signed in");
@@ -286,22 +267,25 @@ export default function HumanTextForm() {
     setLoading(true);
 
     try {
-      await submitPost("human_text", values.post_title, values.post_content, user.id);
+      await submitTextPost(
+        "human_text",
+        values.post_title,
+        values.post_content,
+        user.id
+      );
       console.log("Post submitted successfully");
       form.reset(); // Clear the form fields
-      router.push("/dashboard")
+      router.push("/dashboard");
     } catch (error) {
       console.error("Error submitting post:", error);
     } finally {
       setLoading(false);
     }
-  };
+  }
+```
 
-  return (
-    // Rest of the Return Function as before
-  )};
+And now we're ready to submit posts to our database!
 
-  ```
 
 ## Test it out
 
@@ -321,3 +305,123 @@ I recommend you make several posts which you will be able to fetch from the data
   width={1000}
   height={1000}
 />
+
+
+## Full Code for HumanTextForm
+
+If you've made any mistakes in updating the code, the complete HumanTextForm component should look like this:
+
+```tsx filename="components/forms/HumanTextForm.tsx" copy
+"use client";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+
+import { useState } from "react";
+import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
+
+import submitTextPost from "@/lib/actions/submitTextPost";
+
+const formSchema = z.object({
+  post_title: z.string().min(2).max(50),
+  post_content: z.string().min(2).max(500),
+});
+
+export default function HumanTextForm() {
+  const [loading, setLoading] = useState(false);
+  const { isLoaded, isSignedIn, user } = useUser();
+  const router = useRouter();
+
+  // Form Definition
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      post_title: "",
+      post_content: "",
+    },
+  });
+
+  //  Submit handler.
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    if (!isSignedIn || !user) {
+      console.error("User is not signed in");
+      return;
+    }
+
+    if (loading) {
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      await submitTextPost(
+        "human_text",
+        values.post_title,
+        values.post_content,
+        user.id
+      );
+      console.log("Post submitted successfully");
+      form.reset(); // Clear the form fields
+      router.push("/dashboard");
+    } catch (error) {
+      console.error("Error submitting post:", error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <FormField
+          control={form.control}
+          name="post_title"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Post Title</FormLabel>
+              <FormControl>
+                <Input placeholder="e.g. Project Ideas" {...field} />
+              </FormControl>
+              <FormDescription>This is the title of your post.</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="post_content"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Post Content</FormLabel>
+              <FormControl>
+                <Textarea
+                  placeholder="e.g. This is a short introduction to some of my ideas..."
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit">Submit</Button>
+      </form>
+    </Form>
+  );
+}
+```

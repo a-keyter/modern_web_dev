@@ -1,48 +1,8 @@
 # Forms with ShadCN & ZOD
 
-For this initial demo project, we're going to create a simple dashboard where users can create posts to a shared feed.
-
-We'll set three different types of post, one for Human Text, one for AI Text, and one for AI Images.
-
-We'll also set our system up, such that the user who created a post is able to delete their own post.
+For our first form of the project, we're going to start by creating a simple set of inputs where users can create posts for the main feed.
 
 **For today, we're only going to focus on human_text posts.**
-
-## Create Post Page layout
-
-Let's update our Create Post Page Layout, we'll start by using the `tabs` UI from ShadCN:
-
-```sh copy
-npx shadcn-ui@latest add tabs
-```
-
-We can then follow the docs from shadcn and add this component to our page:
-
-```tsx filename="(user)/create/page.tsx" copy
-import React from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
-function page() {
-  return (
-    <div>
-      <h1>Welcome to the Create Post page</h1>
-      <Tabs defaultValue="human_text" className="w-[600px]">
-        <TabsList>
-          <TabsTrigger value="human_text">Human Post</TabsTrigger>
-          <TabsTrigger value="ai_text">AI Text</TabsTrigger>
-          <TabsTrigger value="ai_image">AI Image</TabsTrigger>
-        </TabsList>
-        <TabsContent value="human_text">
-          <h1>This is where our human input will go.</h1>
-        </TabsContent>
-        <TabsContent value="ai_text">This is where text generation will go.</TabsContent>
-        <TabsContent value="ai_image">This is where image generation will go.</TabsContent>
-      </Tabs>
-    </div>
-  );
-}
-export default page;
-```
 
 ## ShadCN Forms w. zod, react-hook-from
 
@@ -51,7 +11,7 @@ Next up, we'll need to install our form libraries.
 Run the following command in your project terminal:
 
 ```sh copy
-npx shadcn-ui@latest add form
+npx shadcn-ui@latest add form textarea
 ```
 
 We'll also need to install the node libraries for our project:
@@ -60,9 +20,15 @@ We'll also need to install the node libraries for our project:
 npm install zod react-hook-form @hookform/resolvers
 ```
 
-Next, we can create a HumanTextForm.tsx component
+Next, we can create a HumanTextForm.tsx component.
 
-```tsx filename="components/HumanTextForm.tsx" copy
+First let's make a folder where we can store all of our form components:
+
+`components/forms`
+
+Then let's make a HumanTextForm.tsx component and use RFCE to give us:
+
+```tsx filename="components/forms/HumanTextForm.tsx" copy
 import React from 'react'
 
 function HumanTextForm() {
@@ -144,12 +110,13 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-
+import { Textarea } from "../ui/textarea"
+ 
 const formSchema = z.object({
   post_title: z.string().min(2).max(50),
   post_content: z.string().min(2).max(500),
 })
-
+ 
 export default function HumanTextForm() {
   // Form Definition
   const form = useForm<z.infer<typeof formSchema>>({
@@ -159,14 +126,14 @@ export default function HumanTextForm() {
       post_content: "",
     },
   })
- 
+
   //  Submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values)
   }
-
+ 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -193,11 +160,8 @@ export default function HumanTextForm() {
             <FormItem>
               <FormLabel>Post Content</FormLabel>
               <FormControl>
-                <Input placeholder="e.g. This is a short introduction to some of my ideas..." {...field} />
+                <Textarea placeholder="e.g. This is a short introduction to some of my ideas..." {...field} />
               </FormControl>
-              <FormDescription>
-                This is the content of your post.
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -209,6 +173,66 @@ export default function HumanTextForm() {
 }
 ```
 
-Now that we've set up our form, we can now move on to setting up our Database.
+Now that we've set up our form, we can import it into our Human Text tab.
+
+```tsx filename="app/create/page.tsx" {4, 20} copy
+import React from "react";
+import { Card } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import HumanTextForm from "@/components/forms/HumanTextForm";
+
+function page() {
+  return (
+    <main className="flex flex-col items-center gap-y-4 py-4 w-full">
+      <div className="flex flex-col gap-y-4 w-full max-w-2xl p-4">
+        <h2 className="text-2xl font-semibold">Create a new post</h2>
+        <Card className="p-4 w-full">
+        <Tabs defaultValue="human_text" className="w-full">
+          <TabsList>
+            <TabsTrigger value="human_text">Human Text</TabsTrigger>
+            <TabsTrigger value="human_image">Human Image</TabsTrigger>
+            <TabsTrigger value="ai_text">AI Text</TabsTrigger>
+            <TabsTrigger value="ai_image">AI Images</TabsTrigger>
+          </TabsList>
+          <TabsContent value="human_text">
+            <HumanTextForm/>
+          </TabsContent>
+          <TabsContent value="human_image">
+            Create an Image Post Here.
+          </TabsContent>
+          <TabsContent value="ai_text">
+            Create an AI Text Post Here.
+          </TabsContent>
+          <TabsContent value="ai_image">
+            Create an AI Image Post Here.
+          </TabsContent>
+        </Tabs>
+        </Card>
+      </div>
+    </main>
+  );
+}
+
+export default page;
+```
+
+Which will look something like this:
+
+<br />
+
+import Image from "next/image";
+
+<Image
+  src="/forms/init_post.png"
+  alt="Screenshot of the create post page with the human text component"
+  width={1000}
+  height={1000}
+/>
+
+If you fill in the form and submit, then check your console, the contents of the submission should appear.
+
+## Sending form data.
+
+We're now ready to submit the data we've collected from our forms to a database.
 
 For these workshops, we'll be using Firebase from Google.
