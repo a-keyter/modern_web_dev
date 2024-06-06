@@ -2,7 +2,7 @@
 
 In this section, we'll learn to set up a real time listener for new posts on the dashboard.
 
-## Feed component
+## Create the Feed component
 
 We can create a feed component which fetches the data from all posts.
 
@@ -24,26 +24,178 @@ function Feed() {
 export default Feed
 ```
 
-### Listening to updates in the database.
+## Listening for updates in the database.
 
-Next, we'll want to set a listener for the data. 
+Next, we'll want to set a real time listener for new posts in the feed. 
 
 We can use the useCollection hook from Firebase react-firebase-hooks to check for posts in the Database
 
 Let's start by installing the library from node:
 
 ```sh filename="terminal" copy
-npm install react-firebase-hooks
+  npm install react-firebase-hooks
 ```
 
+Next, we'll want to set the import the useCollection hook from react-firebase-hooks.
+
+* We also need to set the query for our database!
 
 
+```tsx filename="/components/Feed.tsx" copy
+"use client";
+import React from "react";
 
+import { db } from "@/firebase";
+import { useUser } from "@clerk/nextjs";
+import { collection, orderBy, query } from "firebase/firestore";
+import { useCollection } from "react-firebase-hooks/firestore";
 
+function Feed() {
+  const user = useUser();
+  const [docs, loading, error] = useCollection(
+    user && query(collection(db, "posts"), orderBy("timestamp", "desc"))
+  );
+  
+  return <div>Feed</div>;
+}
 
+export default Feed;
+```
 
+### Setting types for a Post object:
+
+Because we're in typescript, we also need to define the types of the object we expect from Firebase:
+
+```tsx filename="/components/Feed.tsx" copy
+"use client";
+import React from "react";
+
+import { db } from "@/firebase";
+import { useUser } from "@clerk/nextjs";
+import { collection, orderBy, query } from "firebase/firestore";
+import { useCollection } from "react-firebase-hooks/firestore";
+
+export type PostData = {
+    content: string;
+    postType: string;
+    timestamp: Timestamp;
+    title: string;
+    userId: string;
+    imageUrl: string | null;
+  };
+
+function Feed() {
+  const user = useUser();
+  const [docs, loading, error] = useCollection(
+    user && query(collection(db, "posts"), orderBy("timestamp", "desc"))
+  );
+  
+  return <div>Feed</div>;
+}
+
+export default Feed;
+```
+
+We can then map over our posts and add load state handling. 
 
 Initally, we'll just display the posts from the database as JSON.
+
+```tsx filename="/components/Feed.tsx" copy
+"use client";
+import React from "react";
+
+import { db } from "@/firebase";
+import { Timestamp, collection, orderBy, query } from "firebase/firestore";
+import { useCollection } from "react-firebase-hooks/firestore";
+
+export type PostData = {
+    content: string;
+    postType: string;
+    timestamp: Timestamp;
+    title: string;
+    userId: string;
+    imageUrl: string | null;
+  };
+  
+
+function Feed() {
+    const [docs, loading, error] = useCollection(
+      query(collection(db, "posts"), orderBy("timestamp", "desc"))
+    );
+  
+    if (loading) {
+      return <div>Loading...</div>;
+    }
+  
+    if (error) {
+      return <div>Error: {error.message}</div>;
+    }
+  
+    return (
+      <div>
+        {docs?.docs.map((doc) => {
+          const post = doc.data() as PostData;
+          return (
+            <pre key={doc.id}>
+              {JSON.stringify(post, null, 2)}
+            </pre>
+          );
+        })}
+      </div>
+    );
+  }
+  
+  export default Feed;
+```
+
+Finally, we'll import this into our homepage component and remove our ExamplePosts:
+
+```tsx filename="app/page.tsx" copy
+import ExamplePost from "@/components/ExamplePost";
+import Feed from "@/components/Feed";
+
+export default function Home() {
+  return (
+    <main className="flex min-h-screen flex-col items-center gap-y-4 p-12 w-full">
+      <h1 className="text-6xl font-semibold">Hello World!</h1>
+      <p className="text-center text-2xl">This is our first NextJS Project</p>
+      <Feed />
+    </main>
+  );
+}
+```
+
+Which will give us something like this:
+
+import Image from "next/image";
+
+<br/>
+
+<Image
+  src="/forms/first_posts.png"
+  alt="Screenshot of page with initial posts loaded."
+  width={1000}
+  height={1000}
+/>
+
+
+## Creating a Post component:
+
+Now that we've successfully fetched our data from Firestore, we can create a Post component which will render each post type:
+
+Let's create a new component in the components folder called Post.tsx and run rfce to get the initial layout:
+
+```tsx filename="/components/Post.tsx" copy
+
+
+
+
+
+
+
+We also need to map over the data returned from the collection to show our posts.
+
+
 
 ## Post Component
 
